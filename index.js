@@ -28,10 +28,10 @@ var util = require('util');
 
 /*
 	Vytvorenie spracovania platby
-	@stav {String} :: optional
+	@stav {String}
 	@vs {String}
-	@poznamka {String} :: optional
 	@ss {String} :: optional
+	@poznamka {String} :: optional
 */
 function PlatbaSpracovanie(stav, vs, ss, poznamka) {
 	this.stav = stav || '';
@@ -47,7 +47,7 @@ function PlatbaSpracovanie(stav, vs, ss, poznamka) {
 	@vs {String}
 	@ks {String} :: optional
 	@poznamka {String} :: optional
-	@returnURL {String} :: optional
+	@mena {String} :: optional (default EUR)
 */
 function Platba(cena, vs, ks, poznamka, mena) {
 	this.builder = [];
@@ -637,6 +637,14 @@ exports.PlatbaSpracovanieVebpay = function(key, params) {
 	return platba;
 };
 
+/*
+	Vytvorenie požiadavky na platbu
+	@cena {Number}
+	@vs {String}
+	@ks {String} :: optional
+	@poznamka {String} :: optional
+	@mena {String} :: optional (default EUR)
+*/
 exports.platba = function(cena, vs, ks, poznamka, mena) {
 	return new Platba(cena, vs, ks, poznamka, mena);
 };

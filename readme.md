@@ -22,8 +22,14 @@ $ npm install onlineplatby
 
 ***
 
+## Vytvorenie platby
+
 ```js
 var platby = require('onlineplatby');
+
+// maximálna dĺžka poznámky 30 znakov (overované)
+// poznámka musí byť bez diakritiky ako aj UserName pri CardPay
+// cena, VS, KS, poznámka
 var platba = platby.platba(100.23, '201300001', '0308', 'platba poznamka');
 
 platba.tatrapay('MID', 'KEY', 'return URL');
@@ -57,6 +63,33 @@ platba.toString();
 <a href="javascript:platbaPlatbaonline()">Zaplatiť cez Platbaonline</a>
 <a href="javascript:platbaOtppay()">Zaplatiť cez Otppay</a>
 <a href="javascript:platbaPlatobnetlacitko()">Zaplatiť cez Platobnetlacitko</a>
+```
+
+## Spracovanie platby
+
+```js
+
+var platby = require('onlineplatby');
+
+
+// params musí byť objekt s URL parametrami
+// príklad: require('querystring').parse('RES=OK&VS=12345678&SIGN=348SADUADSZIASDZ');
+
+var platba = platby.PlatbaSpracovanieTatrapay('KEY', params);
+var platba = platby.PlatbaSpracovanieCardpay('KEY', params);
+var platba = platby.PlatbaSpracovanieVubeplatby('KEY', params);
+var platba = platby.PlatbaSpracovanieUniplatba('KEY', params);
+var platba = platby.PlatbaSpracovanieSporopay('KEY', params, tatoURLadresa_returnURL);
+var platba = platby.PlatbaSpracovanieVebpay('KEY', params);
+
+if (platba.JeZaplatena) {
+	// OK
+}
+
+platba.JeZaplatena {Boolean}
+platba.stav {String} :: OK, NO, TOOT
+platba.VS {String} :: variabilný symbol
+
 ```
 
 ## Kontakt
