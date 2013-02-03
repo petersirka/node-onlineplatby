@@ -44,7 +44,6 @@ platba.notifikaciaMobil; // {String} :: nie každá platba podporuje notifikáci
 platba.poznamka; // {String} :: nie každá platba podporuje poznámku
 
 // vygenerovanie platieb
-
 platba.tatrapay('MID', 'KEY', 'return URL');
 platba.cardpay('MID', 'KEY', 'return URL', 'Peter Sirka', '188.167.113.219');
 platba.vubeplatby('MID', 'KEY', 'return URL');
