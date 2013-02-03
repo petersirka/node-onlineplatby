@@ -649,5 +649,5 @@ exports.platba = function(cena, vs, ks, poznamka, mena) {
 	return new Platba(cena, vs, ks, poznamka, mena);
 };
 
-exports.version = 1001;
+exports.version = 1002;
 exports.Platba = Platba;
