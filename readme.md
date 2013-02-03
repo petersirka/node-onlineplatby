@@ -33,6 +33,18 @@ var platby = require('onlineplatby');
 // cena, VS, KS, poznámka
 var platba = platby.platba(100.23, '201300001', '0308', 'platba poznamka');
 
+// objekt platba obsahuje:
+platba.cena; // {Number}
+platba.mena; // {String}
+platba.VS; // {String}
+platba.KS; // {String}
+platba.SS; // {String} :: nie každá platba podporuje SS
+platba.notifikaciaEmail; // {String} :: nie každá platba podporuje notifikáciu
+platba.notifikaciaMobil; // {String} :: nie každá platba podporuje notifikáciu
+platba.poznamka; // {String} :: nie každá platba podporuje poznámku
+
+// vygenerovanie platieb
+
 platba.tatrapay('MID', 'KEY', 'return URL');
 platba.cardpay('MID', 'KEY', 'return URL', 'Peter Sirka', '188.167.113.219');
 platba.vubeplatby('MID', 'KEY', 'return URL');
