@@ -10,8 +10,10 @@ Slovenské online platby pre node.js
 * Poštová banka - platbaonline
 * ČSOB platobné tlačítko - platobnetlacitko
 * OTP Banka - otppay
-* ASMS - platba cez SMS správu (ešte nemám otestované)
+* ASMS - platba cez SMS správu (skoro dokončené, musím to otestovať)
 * __No dependencies__
+
+> Ešte to nemám poriadne otestované ... ale kľúče mi sedeli všetky, návratové URL som skúšal len z Tatrabanky
 
 ***
 
