@@ -1,0 +1,20 @@
+{
+    "name": "onlineplatby",
+    "version": "1.0.0-1",
+    "description": "onlineplatby",
+    "main": "./index.js",
+    "engines": {
+        "node": "0.8.x"
+    },
+    "readmeFilename": "readme.md",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/petersirka/node-onlineplatby.git"
+    },
+    "author": {
+        "name": "Peter Širka"
+    }
+}
