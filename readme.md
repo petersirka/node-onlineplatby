@@ -1,7 +1,6 @@
 Slovenské online platby pre node.js
 ===================================
 
-* jednoduché použitie
 * Tatrabanka - tatrapay
 * Tatrabanka - cardpay
 * Slovenská sporiteľňa - sporopay
@@ -86,9 +85,9 @@ if (platba.JeZaplatena) {
 	// OK
 }
 
-platba.JeZaplatena {Boolean}
-platba.stav {String} :: OK, NO, TOOT
-platba.VS {String} :: variabilný symbol
+platba.JeZaplatena; // {Boolean}
+platba.stav; // {String} OK, NO, TOOT
+platba.VS; // {String} variabilný symbol
 
 ```
 
