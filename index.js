@@ -652,7 +652,7 @@ exports.platba = function(cena, vs, ks, poznamka, mena) {
 	return new Platba(cena, vs, ks, poznamka, mena);
 };
 
-function prepareNumber(num, doubleNil) {
+function prepareNumber(num, doubleZero) {
 	var str = num.toString().replace(',', '.');
 
 	var index = str.indexOf('.');
@@ -663,7 +663,7 @@ function prepareNumber(num, doubleNil) {
 		if (len > 2)
 			str = str.substring(0, index + 3);
 	} else {
-		if (doubleNil || true)
+		if (doubleZero || true)
 			str += '.00';
 	}
 	return str;
