@@ -290,6 +290,9 @@ Platba.prototype.cardpay = function(mid, key, url, userName, ip) {
 			break;
 	}
 
+	userName = userName || 'anonymous';
+	ip = ip || '127.0.0.1';
+
 	if (userName.length > 30)
 		userName = userName.substring(0, 30);
 
