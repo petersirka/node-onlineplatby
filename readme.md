@@ -94,11 +94,11 @@ var platba = platby.PlatbaSpracovanieUniplatba('KEY', params);
 var platba = platby.PlatbaSpracovanieSporopay('KEY', params, tatoURLadresa_returnURL);
 var platba = platby.PlatbaSpracovanieVebpay('KEY', params);
 
-if (platba.JeZaplatena) {
+if (platba.jeZaplatena) {
 	// OK
 }
 
-platba.JeZaplatena; // {Boolean}
+platba.jeZaplatena; // {Boolean}
 platba.stav; // {String} OK, NO, TOOT
 platba.VS; // {String} variabilný symbol
 

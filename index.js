@@ -38,7 +38,7 @@ function PlatbaSpracovanie(stav, vs, ss, poznamka) {
 	this.VS = vs || '';
 	this.SS = ss || '';
 	this.poznamka = poznamka || '';
-	this.JeZaplatena = false;
+	this.jeZaplatena = false;
 };
 
 /*
@@ -557,7 +557,7 @@ String.prototype.padLeft = function padLeft(max, c) {
 exports.PlatbaSpracovanieTatrapay = function(key, params) {
 	var platba = new PlatbaSpracovanie(params.RES, params.VS, params.SS);
 	var sign = desSign((params.VS || '') + (params.SS || '') + (params.RES || ''), key);
-	platba.JeZaplatena = params.SIGN === sign && params.RES === 'OK';
+	platba.jeZaplatena = params.SIGN === sign && params.RES === 'OK';
 	return platba;
 };
 
@@ -569,7 +569,7 @@ exports.PlatbaSpracovanieTatrapay = function(key, params) {
 exports.PlatbaSpracovanieCardpay = function(key, params) {
 	var platba = new PlatbaSpracovanie(params.RES, params.VS);
 	var sign = desSign((params.VS || '') + (params.RES || '') + (params.AC || ''), key);
-	platba.JeZaplatena = params.SIGN === sign && params.RES === 'OK';
+	platba.jeZaplatena = params.SIGN === sign && params.RES === 'OK';
 	return platba;
 };
 
@@ -581,7 +581,7 @@ exports.PlatbaSpracovanieCardpay = function(key, params) {
 exports.PlatbaSpracovanieVubeplatby = function(key, params) {
 	var platba = new PlatbaSpracovanie(params.RES, params.VS);
 	var sign = vubeplatbySign((params.VS || '') + (params.SS || '') + (params.RES || ''), key);
-	platba.JeZaplatena = params.SIGN === sign && params.RES === 'OK';
+	platba.jeZaplatena = params.SIGN === sign && params.RES === 'OK';
 	return platba;
 };
 
@@ -593,7 +593,7 @@ exports.PlatbaSpracovanieVubeplatby = function(key, params) {
 exports.PlatbaSpracovanieUniplatba = function(key, params) {
 	var platba = new PlatbaSpracovanie(params.RES, params.VS);
 	var sign = desSign((params.VS || '') + (params.SS || '') + (params.RES || ''), key);
-	platba.JeZaplatena = params.SIGN === sign && params.RES === 'OK';
+	platba.jeZaplatena = params.SIGN === sign && params.RES === 'OK';
 	return platba;
 };
 
@@ -623,7 +623,7 @@ exports.PlatbaSpracovanieSporopay = function(key, params, url) {
 	signature.push(params.real || '');
 
 	var sign = sporopaySign(signature.join(';'), key);
-	platba.JeZaplatena = params.SIGN2 === sign && params.RES.toLowerCase() === 'ok';
+	platba.jeZaplatena = params.SIGN2 === sign && params.RES.toLowerCase() === 'ok';
 
 	return platba;
 };
@@ -636,7 +636,7 @@ exports.PlatbaSpracovanieSporopay = function(key, params, url) {
 exports.PlatbaSpracovanieVebpay = function(key, params) {
 	var platba = new PlatbaSpracovanie(params.RES, params.VS, params.SS);
 	var sign = desSign((params.VS || '') + (params.SS || '') + (params.RES || ''), key);
-	platba.JeZaplatena = params.SIGN === sign && params.RES === 'OK';
+	platba.jeZaplatena = params.SIGN === sign && params.RES === 'OK';
 	return platba;
 };
 
