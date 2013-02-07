@@ -233,7 +233,7 @@ Platba.prototype.asms = function(mid, key, url, callback) {
 Platba.prototype.tatrapay = function(mid, key, url) {
 
 	var self = this;
-	var cena = self.cena.toString().replace(',', '.');
+	var cena = prepareNumber(self.cena);
 	var mena = '978';
 
 	switch (self.mena.toUpperCase()) {
@@ -281,7 +281,7 @@ Platba.prototype.tatrapay = function(mid, key, url) {
 Platba.prototype.cardpay = function(mid, key, url, userName, ip) {
 
 	var self = this;
-	var cena = self.cena.toString().replace(',', '.');
+	var cena = prepareNumber(self.cena);
 	var mena = '978';
 
 	switch (self.mena.toUpperCase()) {
@@ -331,7 +331,7 @@ Platba.prototype.cardpay = function(mid, key, url, userName, ip) {
 Platba.prototype.sporopay = function(key, ucet, url) {
 
 	var self = this;
-	var cena = self.cena.toString().replace(',', '.');
+	var cena = prepareNumber(self.cena);
 	var mena = self.mena.toUpperCase();
 
 	var bankaPred = '000000';
@@ -378,7 +378,7 @@ Platba.prototype.sporopay = function(key, ucet, url) {
 Platba.prototype.vebpay = function(mid, key, url) {
 
 	var self = this;
-	var cena = self.cena.toString().replace(',', '.');
+	var cena = prepareNumber(self.cena);
 
 	var sign = desSign(mid + cena + self.VS + self.SS + self.KS + url, key);
 
@@ -414,7 +414,7 @@ Platba.prototype.vebpay = function(mid, key, url) {
 Platba.prototype.uniplatba = function(mid, key, url) {
 
 	var self = this;
-	var cena = self.cena.toString().replace(',', '.');
+	var cena = prepareNumber(self.cena);
 	var poznamka = self.poznamka.substring(0, 30);
 
 	var sign = desSign(mid + 'SK' + cena + self.VS + self.KS + self.SS + poznamka, key);
@@ -446,7 +446,7 @@ Platba.prototype.uniplatba = function(mid, key, url) {
 Platba.prototype.vubeplatby = function(mid, key, url) {
 
 	var self = this;
-	var cena = self.cena.toString().replace(',', '.');
+	var cena = prepareNumber(self.cena);
 	var sign = vubeplatbySign(mid + cena + self.VS + self.KS + url, key);
 
 	var platba = {
@@ -474,7 +474,7 @@ Platba.prototype.vubeplatby = function(mid, key, url) {
 */
 Platba.prototype.platobnetlacitko = function(mid, ucet, url) {
 	var self = this;
-	var cena = self.cena.toString().replace(',', '.');
+	var cena = prepareNumber(self.cena);
 	var poznamka = self.poznamka.substring(0, 30);
 
 	ucet = ucet.replace(/\s/g, '').split('/');	
@@ -508,7 +508,7 @@ Platba.prototype.platbaonline = function(mid, url) {
 		P9: self.SS.length > 0 ? platba.SS : '0',
 		URL: url,
 		MID: mid,
-		P1: self.cena.toString().replace(',', '.'),
+		P1: prepareNumber(self.cena),
 		P2: '0',
 		P3: '0',
 		P10: self.poznamka
@@ -528,7 +528,7 @@ Platba.prototype.otppay = function(mid, url) {
 	var platba = {
 		ESHOP: mid,
 		VS: self.VS,
-		CASTKA: self.cena.toString().replace(',', '.'),
+		CASTKA: prepareNumber(self.cena),
 		UL: url
 	};
 
@@ -651,6 +651,23 @@ exports.PlatbaSpracovanieVebpay = function(key, params) {
 exports.platba = function(cena, vs, ks, poznamka, mena) {
 	return new Platba(cena, vs, ks, poznamka, mena);
 };
+
+function prepareNumber(num, doubleNil) {
+	var str = num.toString().replace(',', '.');
+
+	var index = str.indexOf('.');
+	if (index > -1) {
+		var len = str.substring(index + 1).length;
+		if (len === 1)
+			str += '0';
+		if (len > 2)
+			str = str.substring(0, index + 3);
+	} else {
+		if (doubleNil || true)
+			str += '.00';
+	}
+	return str;
+}
 
 exports.version = 1004;
 exports.Platba = Platba;
