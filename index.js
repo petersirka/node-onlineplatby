@@ -303,7 +303,7 @@ Platba.prototype.cardpay = function(mid, key, url, userName, ip) {
 		CS: self.KS,
 		VS: self.VS,
 		MID: mid,
-		IP: ip,
+		IPC: ip,
 		NAME: userName,
 		AMT: cena,
 		LANG: 'SK',
@@ -669,5 +669,5 @@ function prepareNumber(num, doubleZero) {
 	return str;
 }
 
-exports.version = 1004;
+exports.version = 1005;
 exports.Platba = Platba;
