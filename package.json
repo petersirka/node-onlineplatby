@@ -1,6 +1,6 @@
 {
     "name": "onlineplatby",
-    "version": "1.0.0-5",
+    "version": "1.0.0-6",
     "description": "onlineplatby",
     "main": "./index.js",
     "engines": {
@@ -12,7 +12,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/petersirka/onlineplatby.git"
+        "url": "https://github.com/petersirka/node-onlineplatby.git"
     },
     "author": {
         "name": "Peter Širka"
