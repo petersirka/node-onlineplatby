@@ -1,6 +1,8 @@
 Slovenské online platby pre node.js
 ===================================
 
+Začiatkom roka 2015 bude knižnica prepísaná, efektívnejšia a v angličtine. Nemal som ešte čas na aktualizáciu, ale už si ho pomaly vyčleňujem.
+
 * Tatrabanka - tatrapay
 * Tatrabanka - cardpay
 * Slovenská sporiteľňa - sporopay
