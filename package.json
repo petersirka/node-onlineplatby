@@ -1,11 +1,12 @@
 {
     "name": "onlineplatby",
-    "version": "1.0.0-6",
+    "version": "2.0.0",
     "description": "onlineplatby",
     "main": "./index.js",
     "engines": {
-        "node": "0.8.x"
+        "node": ">=4.0.0"
     },
+    "license": "MIT",
     "readmeFilename": "readme.md",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
