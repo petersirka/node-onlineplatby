@@ -427,7 +427,11 @@ function desSign(value, key) {
 	var sign = des.update(value, 'binary', 'base64') + des.final('base64');
 
 	return new Buffer(sign, 'base64').toString('hex').substring(0, 16).toUpperCase();
-};
+}
+
+function hmacSign256(value, key) {
+	return crypto.createHmac('SHA256', new Buffer(key, 'hex')).update(value).digest('hex');
+}
 
 function sporopaySign(value, key) {
 
@@ -595,3 +599,4 @@ exports.create = function(amount, vs, cs, note, currency) {
 };
 
 exports.version = 1005;
+
