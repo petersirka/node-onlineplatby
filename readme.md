@@ -3,8 +3,8 @@ Slovenské online platby pre node.js
 
 > Nemal som možnosť všetko otestovať. V prípade problému ma kontaktujte.
 
-* Tatrabanka - tatrapay
-* Tatrabanka - cardpay
+* Tatra banka - tatrapay (hmac + des)
+* Tatra banka - cardpay (hmac + des)
 * Slovenská sporiteľňa - sporopay
 * VÚB banka - vubeplatby
 * Volksbank - vebpay
@@ -45,8 +45,12 @@ payment.phone;     // {String} :: nie každá služba podporuje notifikáciu
 payment.poznamka;  // {String} :: nie každá služba podporuje poznámku
 
 // vygenerovanie platieb
-payment.tatrapay('MID', 'KEY', 'return URL');
-payment.cardpay('MID', 'KEY', 'return URL', 'Peter Sirka', '188.167.113.219');
+
+payment.tatrapay('MID', 'KEY', 'return URL'); // HMAC
+payment.cardpay('MID', 'KEY', 'return URL', 'Peter Sirka', '188.167.113.219'); // HMAC
+payment.tatrapay2('MID', 'KEY', 'return URL'); // DES
+payment.cardpay2('MID', 'KEY', 'return URL', 'Peter Sirka', '188.167.113.219'); // DES
+
 payment.vubeplatby('MID', 'KEY', 'return URL');
 payment.uniplatba('MID', 'KEY', 'return URL');
 payment.vebpay('MID', 'KEY', 'return URL');
@@ -87,8 +91,10 @@ var OP = require('onlineplatby');
 // params musí byť objekt s URL parametrami
 // príklad: require('querystring').parse('RES=OK&VS=12345678&SIGN=348SADUADSZIASDZ');
 
-var response = OP.process('tatrapay', 'KEY', params);
-var response = OP.process('cardpay', 'KEY', params);
+var response = OP.process('tatrapay', 'KEY', params); // HMAC
+var response = OP.process('cardpay', 'KEY', params); // HMAC
+var response = OP.process('tatrapay2', 'KEY', params); // DES
+var response = OP.process('cardpay2', 'KEY', params); // DES
 var response = OP.process('vubeplatby', 'KEY', params);
 var response = OP.process('uniplatba', 'KEY', params);
 var response = OP.process('sporopay', 'KEY', params, current_process_url_address);

@@ -45,7 +45,7 @@ function Payment(amount, vs, cs, note, currency) {
  * @param {String} url Redirect URL.
  * @return {Payment}
  */
-Payment.prototype.tatrapay = function(mid, key, url) {
+Payment.prototype.tatrapay2 = function(mid, key, url) {
 
 	var self = this;
 	var amount = prepareAmount(self.amount);
@@ -85,12 +85,111 @@ Payment.prototype.tatrapay = function(mid, key, url) {
 };
 
 /**
+ * Tatra banka (tatrapay)
+ * @param {String} mid
+ * @param {String} key
+ * @param {String} url Redirect URL.
+ * @return {Payment}
+ */
+Payment.prototype.tatrapay = function(mid, key, url) {
+
+	var self = this;
+	var amount = prepareAmount(self.amount);
+	var currency = '978';
+
+	switch (self.currency.toUpperCase()) {
+		case 'EUR':
+			currency = '978';
+			break;
+	}
+
+	var dt = new Date();
+	var data = {
+		PT: 'TatraPay',
+		CS: self.CS,
+		VS: self.VS,
+		MID: mid,
+		DESC: self.note.substring(0, 30),
+		AMT: amount,
+		LANG: 'SK',
+		CURR: currency,
+		TIMESTAMP: dt.getDate().toString().padLeft(2) + (dt.getMonth() + 1).toString().padLeft(2) + dt.getFullYear() + dt.getHours().toString().padLeft(2) + dt.getMinutes().toString().padLeft(2) + dt.getSeconds().toString().padLeft(2),
+		RURL: url
+	};
+
+	data.SIGN = hmacSign256(data.MID + data.AMT + data.CURR + data.VS + data.CS + data.RURL + data.TIMESTAMP, key);
+
+	if (self.SS)
+		data.SS = self.SS;
+
+	if (self.email)
+		data.REM = self.email;
+
+	self.builder.push(createForm('onlineplatby_tatrapay', data, 'https://moja.tatrabanka.sk/cgi-bin/e-commerce/start/e-commerce.jsp'));
+	return self;
+};
+
+/**
  * Tatra banka (cardpay)
  * @param {String} mid
  * @param {String} key
  * @param {String} url Redirect URL.
  * @param {String} username
  * @param {String} ip
+ * @return {Payment}
+ */
+Payment.prototype.cardpay2 = function(mid, key, url, username, ip) {
+
+	var self = this;
+	var amount = prepareAmount(self.amount);
+	var currency = '978';
+
+	switch (self.currency.toUpperCase()) {
+		case 'EUR':
+			currency = '978';
+			break;
+	}
+
+	if (!username)
+		username = 'anonymous';
+
+	if (!ip)
+		ip = '127.0.0.1';
+
+	if (username.length > 30)
+		username = username.substring(0, 30);
+
+	var sign = desSign(mid + amount + currency + self.VS + self.CS + url + ip + username, key);
+
+	var data = {
+		PT: 'CardPay',
+		CS: self.CS,
+		VS: self.VS,
+		MID: mid,
+		IPC: ip,
+		NAME: username,
+		AMT: amount,
+		LANG: 'SK',
+		CURR: currency,
+		SIGN: sign,
+		RURL: url
+	};
+
+	if (self.email)
+		data.REM = self.email;
+
+	if (self.phone)
+		data.RSMS = self.phone;
+
+	self.builder.push(createForm('onlineplatby_cardpay', data, 'https://moja.tatrabanka.sk/cgi-bin/e-commerce/start/e-commerce.jsp'));
+	return self;
+};
+
+/**
+ * Tatra banka (cardpay)
+ * @param {String} mid
+ * @param {String} key
+ * @param {String} url Redirect URL.
  * @return {Payment}
  */
 Payment.prototype.cardpay = function(mid, key, url, username, ip) {
@@ -114,29 +213,27 @@ Payment.prototype.cardpay = function(mid, key, url, username, ip) {
 	if (username.length > 30)
 		username = username.substring(0, 30);
 
-	var sign = desSign(mid + amount + currency + self.VS + self.CS + url + ip + username, key);
-
-	var platba = {
-		PT: 'CardPay',
+	var dt = new Date();
+	var data = {
+		AREDIR: '1',
 		CS: self.CS,
 		VS: self.VS,
 		MID: mid,
 		IPC: ip,
 		NAME: username,
 		AMT: amount,
-		LANG: 'SK',
+		LANG: 'sk',
 		CURR: currency,
-		SIGN: sign,
+		TIMESTAMP: dt.getDate().toString().padLeft(2) + (dt.getMonth() + 1).toString().padLeft(2) + dt.getFullYear() + dt.getHours().toString().padLeft(2) + dt.getMinutes().toString().padLeft(2) + dt.getSeconds().toString().padLeft(2),
 		RURL: url
 	};
+
+	data.HMAC = hmacSign256(data.MID + data.AMT + data.CURR + data.VS + data.RURL + data.IPC + data.NAME + data.TIMESTAMP, key);
 
 	if (self.email)
 		data.REM = self.email;
 
-	if (self.phone)
-		data.RSMS = self.phone;
-
-	self.builder.push(createForm('onlineplatby_cardpay', data, 'https://moja.tatrabanka.sk/cgi-bin/e-commerce/start/e-commerce.jsp'));
+	self.builder.push(createForm('onlineplatby_cardpay', data, 'https://moja.tatrabanka.sk/cgi-bin/e-commerce/start/cardpay'));
 	return self;
 };
 
@@ -510,7 +607,7 @@ if (!String.prototype.padLeft) {
 		if (len < 0)
 			return self;
 		if (c === undefined)
-			c = ' ';
+			c = '0';
 		while (len--)
 			self = c + self;
 		return self;
@@ -548,11 +645,21 @@ exports.process = function(type, key, params, url) {
 
 	switch (type) {
 		case 'tatrapay':
+			sign = hmacSign256((params.AMT || '') + (params.CURR || '') + (params.VS || '') + (params.CS || '') + (params.RES || '') + (params.TID || '') + (params.TIMESTAMP || ''), key);
+			response = new Response(params.RES, params.VS);
+			response.paid = params.HMAC === sign && params.RES === 'OK';
+			return response;
+		case 'cardpay':
+			sign = hmacSign256((params.AMT || '') + (params.CURR || '') + (params.VS || '') + (params.RES || '') + (params.AC || '') + (params.TID || '') + (params.TIMESTAMP || ''), key);
+			response = new Response(params.RES, params.VS);
+			response.paid = params.HMAC === sign && params.RES === 'OK';
+			return response;
+		case 'tatrapay2':
 			sign = desSign((params.VS || '') + (params.SS || '') + (params.RES || ''), key);
 			response = new Response(params.RES, params.VS, params.SS);
 			response.paid = params.SIGN === sign && params.RES === 'OK';
 			return response;
-		case 'cardpay':
+		case 'cardpay2':
 			sign = desSign((params.VS || '') + (params.RES || '') + (params.AC || ''), key);
 			response = new Response(params.RES, params.VS);
 			response.paid = params.SIGN === sign && params.RES === 'OK';
@@ -599,4 +706,3 @@ exports.create = function(amount, vs, cs, note, currency) {
 };
 
 exports.version = 1005;
-
