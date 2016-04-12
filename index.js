@@ -111,13 +111,14 @@ Payment.prototype.tatrapay = function(mid, key, url) {
 		MID: mid,
 		DESC: self.note.substring(0, 30),
 		AMT: amount,
-		LANG: 'SK',
+		LANG: 'sk',
 		CURR: currency,
+		AREDIR: '1',
 		TIMESTAMP: dt.getDate().toString().padLeft(2) + (dt.getMonth() + 1).toString().padLeft(2) + dt.getFullYear() + dt.getHours().toString().padLeft(2) + dt.getMinutes().toString().padLeft(2) + dt.getSeconds().toString().padLeft(2),
 		RURL: url
 	};
 
-	data.SIGN = hmacSign256(data.MID + data.AMT + data.CURR + data.VS + data.CS + data.RURL + data.TIMESTAMP, key);
+	data.HMAC = hmacSign256(data.MID + data.AMT + data.CURR + data.VS + data.CS + data.RURL + data.TIMESTAMP, key);
 
 	if (self.SS)
 		data.SS = self.SS;
@@ -125,7 +126,7 @@ Payment.prototype.tatrapay = function(mid, key, url) {
 	if (self.email)
 		data.REM = self.email;
 
-	self.builder.push(createForm('onlineplatby_tatrapay', data, 'https://moja.tatrabanka.sk/cgi-bin/e-commerce/start/e-commerce.jsp'));
+	self.builder.push(createForm('onlineplatby_tatrapay', data, 'https://moja.tatrabanka.sk/cgi-bin/e-commerce/start/tatrapay'));
 	return self;
 };
 
