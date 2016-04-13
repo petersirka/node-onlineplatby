@@ -703,7 +703,7 @@ exports.process = function(type, key, params, url) {
 };
 
 exports.create = function(amount, vs, cs, note, currency) {
-	return new Payment(amount, vs, css, note, currency);
+	return new Payment(amount, vs, cs, note, currency);
 };
 
 exports.version = 1005;
