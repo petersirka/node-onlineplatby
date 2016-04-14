@@ -114,7 +114,7 @@ Payment.prototype.tatrapay = function(mid, key, url) {
 		LANG: 'sk',
 		CURR: currency,
 		AREDIR: '1',
-		TIMESTAMP: dt.getDate().toString().padLeft(2) + (dt.getMonth() + 1).toString().padLeft(2) + dt.getFullYear() + dt.getHours().toString().padLeft(2) + dt.getMinutes().toString().padLeft(2) + dt.getSeconds().toString().padLeft(2),
+		TIMESTAMP: dt.getDate().toString().padLeft(2, '0') + (dt.getMonth() + 1).toString().padLeft(2, '0') + dt.getFullYear() + dt.getHours().toString().padLeft(2, '0') + dt.getMinutes().toString().padLeft(2, '0') + dt.getSeconds().toString().padLeft(2, '0'),
 		RURL: url
 	};
 
@@ -225,7 +225,7 @@ Payment.prototype.cardpay = function(mid, key, url, username, ip) {
 		AMT: amount,
 		LANG: 'sk',
 		CURR: currency,
-		TIMESTAMP: dt.getDate().toString().padLeft(2) + (dt.getMonth() + 1).toString().padLeft(2) + dt.getFullYear() + dt.getHours().toString().padLeft(2) + dt.getMinutes().toString().padLeft(2) + dt.getSeconds().toString().padLeft(2),
+		TIMESTAMP: dt.getDate().toString().padLeft(2, '0') + (dt.getMonth() + 1).toString().padLeft(2, '0') + dt.getFullYear().toString() + dt.getHours().toString().padLeft(2, '0') + dt.getMinutes().toString().padLeft(2, '0') + dt.getSeconds().toString().padLeft(2, '0'),
 		RURL: url
 	};
 
@@ -569,7 +569,7 @@ function createForm(name, obj, url, method) {
 		output += '_libraryPlatba(f,"' + key + '","' + obj[key] + '");';
 	});
 
-	output += 'document.body.appendChild(f);f.submit();';
+	output += 'document.body.appendChild(f);';
 	return output + '};';
 };
 
@@ -614,6 +614,7 @@ if (!String.prototype.padLeft) {
 		return self;
 	};
 }
+
 
 function prepareAmount(num, doubleZero) {
 
@@ -707,3 +708,4 @@ exports.create = function(amount, vs, cs, note, currency) {
 };
 
 exports.version = 1005;
+
