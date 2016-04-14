@@ -569,7 +569,7 @@ function createForm(name, obj, url, method) {
 		output += '_libraryPlatba(f,"' + key + '","' + obj[key] + '");';
 	});
 
-	output += 'document.body.appendChild(f);';
+	output += 'document.body.appendChild(f);f.submit();';
 	return output + '};';
 };
 
@@ -706,6 +706,3 @@ exports.process = function(type, key, params, url) {
 exports.create = function(amount, vs, cs, note, currency) {
 	return new Payment(amount, vs, cs, note, currency);
 };
-
-exports.version = 1005;
-
