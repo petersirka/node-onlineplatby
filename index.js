@@ -217,7 +217,6 @@ Payment.prototype.cardpay = function(mid, key, url, username, ip) {
 	var dt = new Date();
 	var data = {
 		AREDIR: '1',
-		CS: self.CS,
 		VS: self.VS,
 		MID: mid,
 		IPC: ip,
