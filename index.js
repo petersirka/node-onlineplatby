@@ -528,7 +528,7 @@ function desSign(value, key) {
 }
 
 function hmacSign256(value, key) {
-	return crypto.createHmac('SHA256', new Buffer(key, 'hex')).update(value).digest('hex');
+	return crypto.createHmac('SHA256', key.length === 128 ? new Buffer(key, 'hex') : new Buffer(key, 'ascii')).update(value).digest('hex');
 }
 
 function sporopaySign(value, key) {
