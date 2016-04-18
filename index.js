@@ -105,7 +105,6 @@ Payment.prototype.tatrapay = function(mid, key, url) {
 
 	var dt = new Date();
 	var data = {
-		PT: 'TatraPay',
 		CS: self.CS,
 		VS: self.VS,
 		MID: mid,
