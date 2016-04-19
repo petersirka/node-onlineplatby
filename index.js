@@ -113,7 +113,7 @@ Payment.prototype.tatrapay = function(mid, key, url) {
 		LANG: 'sk',
 		CURR: currency,
 		AREDIR: '1',
-		TIMESTAMP: dt.getDate().toString().padLeft(2, '0') + (dt.getMonth() + 1).toString().padLeft(2, '0') + dt.getFullYear() + dt.getHours().toString().padLeft(2, '0') + dt.getMinutes().toString().padLeft(2, '0') + dt.getSeconds().toString().padLeft(2, '0'),
+		TIMESTAMP: createTimeStamp(),
 		RURL: url
 	};
 
@@ -223,7 +223,7 @@ Payment.prototype.cardpay = function(mid, key, url, username, ip) {
 		AMT: amount,
 		LANG: 'sk',
 		CURR: currency,
-		TIMESTAMP: dt.getDate().toString().padLeft(2, '0') + (dt.getMonth() + 1).toString().padLeft(2, '0') + dt.getFullYear().toString() + dt.getHours().toString().padLeft(2, '0') + dt.getMinutes().toString().padLeft(2, '0') + dt.getSeconds().toString().padLeft(2, '0'),
+		TIMESTAMP: createTimeStamp(),
 		RURL: url
 	};
 
@@ -700,6 +700,13 @@ exports.process = function(type, key, params, url) {
 			return response;
 	}
 };
+
+function createTimeStamp() {
+	var dt = new Date().toISOString();
+	var arr = dt.split('T');
+	var d = arr[0].split('-');
+	return d[2] + d[1] + d[0] + arr[1].substring(0, arr[1].indexOf('.')).replace(/\:/g, '');
+}
 
 exports.create = function(amount, vs, cs, note, currency) {
 	return new Payment(amount, vs, cs, note, currency);
