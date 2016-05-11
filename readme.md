@@ -42,7 +42,7 @@ payment.CS;        // {String} :: nie každá služba podporuje SS
 payment.SS;        // {String} :: nie každá služba podporuje SS
 payment.email;     // {String} :: nie každá služba podporuje notifikáciu
 payment.phone;     // {String} :: nie každá služba podporuje notifikáciu
-payment.poznamka;  // {String} :: nie každá služba podporuje poznámku
+payment.note;      // {String} :: nie každá služba podporuje poznámku
 
 // vygenerovanie platieb
 
