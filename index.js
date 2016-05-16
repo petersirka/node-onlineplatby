@@ -117,13 +117,13 @@ Payment.prototype.tatrapay = function(mid, key, url) {
 		RURL: url
 	};
 
-	data.HMAC = hmacSign256(data.MID + data.AMT + data.CURR + data.VS + data.CS + data.RURL + data.TIMESTAMP, key);
+	if (self.email)
+		data.REM = self.email;
+
+	data.HMAC = hmacSign256(data.MID + data.AMT + data.CURR + data.VS + data.CS + data.RURL + (data.REM || '') + data.TIMESTAMP, key);
 
 	if (self.SS)
 		data.SS = self.SS;
-
-	if (self.email)
-		data.REM = self.email;
 
 	self.builder.push(createForm('onlineplatby_tatrapay', data, 'https://moja.tatrabanka.sk/cgi-bin/e-commerce/start/tatrapay'));
 	return self;
