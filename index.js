@@ -227,10 +227,10 @@ Payment.prototype.cardpay = function(mid, key, url, username, ip) {
 		RURL: url
 	};
 
-	data.HMAC = hmacSign256(data.MID + data.AMT + data.CURR + data.VS + data.RURL + data.IPC + data.NAME + data.TIMESTAMP, key);
-
 	if (self.email)
 		data.REM = self.email;
+
+	data.HMAC = hmacSign256(data.MID + data.AMT + data.CURR + data.VS + data.RURL + data.IPC + data.NAME + (data.REM || '') + data.TIMESTAMP, key);
 
 	self.builder.push(createForm('onlineplatby_cardpay', data, 'https://moja.tatrabanka.sk/cgi-bin/e-commerce/start/cardpay'));
 	return self;
