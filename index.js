@@ -71,15 +71,9 @@ Payment.prototype.tatrapay2 = function(mid, key, url) {
 		RURL: url
 	};
 
-	if (self.SS)
-		data.SS = self.SS;
-
-	if (self.email)
-		data.REM = self.email;
-
-	if (self.phone)
-		data.RSMS = self.phone;
-
+	self.SS && (data.SS = self.SS);
+	self.email && (data.REM = self.email);
+	self.phone && (data.RSMS = self.phone);
 	self.builder.push(createForm('onlineplatby_tatrapay', data, 'https://moja.tatrabanka.sk/cgi-bin/e-commerce/start/e-commerce.jsp'));
 	return self;
 };
@@ -117,14 +111,9 @@ Payment.prototype.tatrapay = function(mid, key, url) {
 		RURL: url
 	};
 
-	if (self.email)
-		data.REM = self.email;
-
+	self.email && (data.REM = self.email);
 	data.HMAC = hmacSign256(data.MID + data.AMT + data.CURR + data.VS + data.CS + data.RURL + (data.REM || '') + data.TIMESTAMP, key);
-
-	if (self.SS)
-		data.SS = self.SS;
-
+	self.SS && (data.SS = self.SS);
 	self.builder.push(createForm('onlineplatby_tatrapay', data, 'https://moja.tatrabanka.sk/cgi-bin/e-commerce/start/tatrapay'));
 	return self;
 };
@@ -150,14 +139,9 @@ Payment.prototype.cardpay2 = function(mid, key, url, username, ip) {
 			break;
 	}
 
-	if (!username)
-		username = 'anonymous';
-
-	if (!ip)
-		ip = '127.0.0.1';
-
-	if (username.length > 30)
-		username = username.substring(0, 30);
+	!username && (username = 'anonymous');
+	!ip && (ip = '127.0.0.1');
+	username.length > 30 && (username = username.substring(0, 30));
 
 	var sign = desSign(mid + amount + currency + self.VS + self.CS + url + ip + username, key);
 
@@ -175,12 +159,8 @@ Payment.prototype.cardpay2 = function(mid, key, url, username, ip) {
 		RURL: url
 	};
 
-	if (self.email)
-		data.REM = self.email;
-
-	if (self.phone)
-		data.RSMS = self.phone;
-
+	self.email && (data.REM = self.email);
+	self.phone && (data.RSMS = self.phone);
 	self.builder.push(createForm('onlineplatby_cardpay', data, 'https://moja.tatrabanka.sk/cgi-bin/e-commerce/start/e-commerce.jsp'));
 	return self;
 };
@@ -204,14 +184,9 @@ Payment.prototype.cardpay = function(mid, key, url, username, ip) {
 			break;
 	}
 
-	if (!username)
-		username = 'anonymous';
-
-	if (!ip)
-		ip = '127.0.0.1';
-
-	if (username.length > 30)
-		username = username.substring(0, 30);
+	!username && (username = 'anonymous');
+	!ip && (ip = '127.0.0.1');
+	username.length > 30 && (username = username.substring(0, 30));
 
 	var dt = new Date();
 	var data = {
@@ -227,11 +202,8 @@ Payment.prototype.cardpay = function(mid, key, url, username, ip) {
 		RURL: url
 	};
 
-	if (self.email)
-		data.REM = self.email;
-
+	self.email && (data.REM = self.email);
 	data.HMAC = hmacSign256(data.MID + data.AMT + data.CURR + data.VS + data.RURL + data.IPC + data.NAME + (data.REM || '') + data.TIMESTAMP, key);
-
 	self.builder.push(createForm('onlineplatby_cardpay', data, 'https://moja.tatrabanka.sk/cgi-bin/e-commerce/start/cardpay'));
 	return self;
 };
@@ -307,15 +279,9 @@ Payment.prototype.vebpay = function(mid, key, url) {
 		RURL: url
 	};
 
-	if (self.SS)
-		data.SS = self.SS;
-
-	if (self.email)
-		data.REM = self.email;
-
-	if (self.phone)
-		data.RSMS = self.phone;
-
+	self.SS && (data.SS = self.SS);
+	self.email && (data.REM = self.email);
+	self.phone && (data.RSMS = self.phone);
 	self.builder.push(createForm('onlineplatby_vebpay', data, 'https://ibs.luba.sk/vebpay/'));
 	return self;
 };
@@ -345,9 +311,7 @@ Payment.prototype.uniplatba = function(mid, key, url) {
 		RURL: url
 	};
 
-	if (self.SS)
-		data.SS = self.SS;
-
+	self.SS && (data.SS = self.SS);
 	self.builder.push(createForm('onlineplatby_uniplatba', data, 'https://sk.unicreditbanking.net/disp?restart=true&link=login.tplogin.system_login'));
 	return self;
 };
@@ -375,9 +339,7 @@ Payment.prototype.vubeplatby = function(mid, key, url) {
 		RURL: url
 	};
 
-	if (self.SS)
-		data.SS = self.SS;
-
+	self.SS && (data.SS = self.SS);
 	self.builder.push(createForm('onlineplatby_vubeplatby', data, 'https://ib.vub.sk/e-platbyeuro.aspx'));
 	return self;
 };
@@ -451,11 +413,8 @@ Payment.prototype.otppay = function(mid, url) {
 		URL: url
 	};
 
-	if (self.CS)
-		data.CS = self.CS;
-
-	if (self.SS)
-		data.SS = self.SS;
+	self.CS && (data.CS = self.CS);
+	self.SS && (data.SS = self.SS);
 
 	self.builder.push(createForm('onlineplatby_otppay', data, 'https://otpdirekt.otpbanka.sk/login/login_main_jelszoalapu.jsp'));
 	return self;
@@ -493,6 +452,33 @@ Payment.prototype.asms = function(mid, key, url, callback) {
 		callback(err, err ? null : Qs.parse(data));
 	});
 
+	return self;
+};
+
+/**
+ * TrustPay (trustpay)
+ * @param {String} mid
+ * @param {String} key
+ * @param {String} url Redirect URL.
+ * @return {Payment}
+ */
+Payment.prototype.trustpay = function(aid, key, url) {
+
+	var self = this;
+	var amount = prepareAmount(self.amount);
+
+	var data = {
+		AID: aid,
+		AMT: amount,
+		REF: self.VS,
+		CUR: self.currency,
+		URL: url,
+		DESC: self.note ? self.note.substring(0, 256) : '',
+	};
+
+	data.SIG = hmacSign256(data.AID + data.AMT + data.CUR + data.REF, key).toUpperCase();
+	self.email && (data.EMA = self.email);
+	self.builder.push(createForm('onlineplatby_trustpay', data, 'https://ib.test.trustpay.eu/mapi/pay.aspx'));
 	return self;
 };
 
@@ -599,20 +585,17 @@ function request(url, method, data, callback) {
 	}
 };
 
-if (!String.prototype.padLeft) {
-	String.prototype.padLeft = function(max, c) {
-		var self = this;
-		var len = max - self.length;
-		if (len < 0)
-			return self;
-		if (c === undefined)
-			c = '0';
-		while (len--)
-			self = c + self;
+!String.prototype.padLeft && (String.prototype.padLeft = function(max, c) {
+	var self = this;
+	var len = max - self.length;
+	if (len < 0)
 		return self;
-	};
-}
-
+	if (c === undefined)
+		c = '0';
+	while (len--)
+		self = c + self;
+	return self;
+});
 
 function prepareAmount(num, doubleZero) {
 

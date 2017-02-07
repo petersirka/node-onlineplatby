@@ -1,5 +1,5 @@
-Slovenské online platby pre node.js
-===================================
+Node.js: Slovenské online platby
+================================
 
 > Nemal som možnosť všetko otestovať. V prípade problému ma kontaktujte.
 
@@ -113,4 +113,4 @@ repsonse.note;    // {String} poznámka
 
 ## Kontakt
 
-[Peter Širka](http://www.petersirka.eu), contact: <petersirka@gmail.com>
+[Peter Širka](http://www.petersirka.sk), e-mail: <petersirka@gmail.com>
