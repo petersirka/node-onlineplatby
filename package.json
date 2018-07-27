@@ -1,6 +1,6 @@
 {
     "name": "onlineplatby",
-    "version": "2.3.2",
+    "version": "2.3.3",
     "description": "onlineplatby",
     "main": "./index.js",
     "engines": {
