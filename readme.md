@@ -23,7 +23,7 @@ $ npm install onlineplatby
 
 ***
 
-## Vytvorenie platby
+## Vytvorenie platby
 
 ```js
 var OP = require('onlineplatby');

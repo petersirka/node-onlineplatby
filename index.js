@@ -97,7 +97,6 @@ Payment.prototype.tatrapay = function(mid, key, url) {
 			break;
 	}
 
-	var dt = new Date();
 	var data = {
 		CS: self.CS,
 		VS: self.VS,
@@ -188,7 +187,6 @@ Payment.prototype.cardpay = function(mid, key, url, username, ip) {
 	!ip && (ip = '127.0.0.1');
 	username.length > 30 && (username = username.substring(0, 30));
 
-	var dt = new Date();
 	var data = {
 		AREDIR: '1',
 		VS: self.VS,
@@ -354,7 +352,7 @@ Payment.prototype.vubeplatby = function(mid, key, url) {
 Payment.prototype.platobnetlacitko = function(mid, account, url) {
 
 	var self = this;
-	var amount = prepareNumber(self.amount);
+	var amount = prepareAmount(self.amount);
 	var note = self.note ? self.note.substring(0, 30) : '';
 
 	account = account.replace(/\s/g, '').split('/');
@@ -409,7 +407,7 @@ Payment.prototype.otppay = function(mid, url) {
 	var data = {
 		ESHOP: mid,
 		VS: self.VS,
-		CASTKA: prepareNumber(self.amount),
+		CASTKA: prepareAmount(self.amount),
 		URL: url
 	};
 
@@ -500,28 +498,28 @@ function Response(status, vs, ss, note) {
 
 function desSign(value, key) {
 	var sha1 = crypto.createHash('sha1');
-	var buffer = new Buffer(sha1.update(value).digest('binary'), 'binary');
+	var buffer = sha1.update(value).digest();
 
-	value = buffer.slice(0, 8).toString('binary');
-	key = new Buffer(key, 'ascii').toString('binary');
+	value = buffer.slice(0, 8);
+	key = Buffer.from(key, 'ascii');
 
 	var des = new crypto.createCipheriv('DES-ECB', key, '');
-	var sign = des.update(value, 'binary', 'base64') + des.final('base64');
+	var sign = des.update(value, 'base64') + des.final('base64');
 
-	return new Buffer(sign, 'base64').toString('hex').substring(0, 16).toUpperCase();
+	return Buffer.from(sign, 'base64').toString('hex').substring(0, 16).toUpperCase();
 }
 
 function hmacSign256(value, key) {
-	return crypto.createHmac('SHA256', key.length === 128 ? new Buffer(key, 'hex') : new Buffer(key, 'ascii')).update(value).digest('hex');
+	return crypto.createHmac('SHA256', key.length === 128 ? Buffer.from(key, 'hex') : Buffer.from(key, 'ascii')).update(value).digest('hex');
 }
 
 function sporopaySign(value, key) {
 
 	var sha1 = crypto.createHash('sha1');
 
-	var buffer = new Buffer(sha1.update(value).digest('binary'), 'binary');
-	var sign = new Buffer(24);
-	var iv = new Buffer(8);
+	var buffer = sha1.update(value).digest();
+	var sign = Buffer.alloc(24);
+	var iv = Buffer.alloc(8);
 
 	for (var i = 0; i < buffer.length; i++)
 		sign[i] = buffer[i];
@@ -535,16 +533,16 @@ function sporopaySign(value, key) {
 	//console.log(iv.toString('base64'));
 	//console.log(new Buffer(key, 'base64'));
 
-	var des = new crypto.createCipheriv('des-ede-cbc', new Buffer(key, 'base64'), iv);
-	var output = des.update(sign, 'binary', 'base64');
+	var des = new crypto.createCipheriv('des-ede-cbc', Buffer.from(key, 'base64'), iv);
+	var output = des.update(sign, 'base64');
 
 	return output;
-};
+}
 
 function vubeplatbySign(value, key) {
 	var sha256 = crypto.createHmac('sha256', key);
 	return sha256.update(value).digest('hex').toUpperCase();
-};
+}
 
 function createForm(name, obj, url, method) {
 	var output = 'fun' + 'ction ' + name + '() {var f=document.createElement("FORM");f.setAttribute("action","' + url + '");f.setAttribute("method","' + ( method || 'POST') + '");f.setAttribute("name","' + name + '");';
@@ -555,7 +553,7 @@ function createForm(name, obj, url, method) {
 
 	output += 'document.body.appendChild(f);f.submit();';
 	return output + '};';
-};
+}
 
 function request(url, method, data, callback) {
 
@@ -583,7 +581,7 @@ function request(url, method, data, callback) {
 	} catch (ex) {
 		callback(ex, null);
 	}
-};
+}
 
 !String.prototype.padLeft && (String.prototype.padLeft = function(max, c) {
 	var self = this;
@@ -677,7 +675,7 @@ exports.process = function(type, key, params, url) {
 			tmp.push(url);
 			tmp.push(params.result || '');
 			tmp.push(params.real || '');
-			sign = sporopaySign(signature.join(';'), key);
+			sign = sporopaySign(tmp.join(';'), key);
 			response = new Response(params.result, params.vs, params.ss);
 			response.paid = params.SIGN2 === sign && params.RES.toLowerCase() === 'ok';
 			return response;
@@ -688,7 +686,7 @@ function createTimeStamp() {
 	var dt = new Date().toISOString();
 	var arr = dt.split('T');
 	var d = arr[0].split('-');
-	return d[2] + d[1] + d[0] + arr[1].substring(0, arr[1].indexOf('.')).replace(/\:/g, '');
+	return d[2] + d[1] + d[0] + arr[1].substring(0, arr[1].indexOf('.')).replace(/:/g, '');
 }
 
 exports.create = function(amount, vs, cs, note, currency) {
