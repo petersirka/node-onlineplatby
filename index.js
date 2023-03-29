@@ -1,5 +1,5 @@
 // The MIT License
-// Copyright 2012-2016 (c) Peter Širka <petersirka@gmail.com>
+// Copyright 2012-2023 (c) Peter Širka <petersirka@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the
@@ -27,7 +27,7 @@ var Qs = require('querystring');
 var crypto = require('crypto');
 
 function Payment(amount, vs, cs, note, currency) {
-	this.builder = ['func' + 'tion _libraryPlatba(f,n,v){var i=document.createElement("INPUT");i.setAttribute("type","hidden");i.setAttribute("name",n);i.setAttribute("value",v);f.appendChild(i);return i;}'];
+	this.builder = ['func' + 'tion onlineplatbyinput(f,n,v){var i=document.createElement("INPUT");i.setAttribute("type","hidden");i.setAttribute("name",n);i.setAttribute("value",v);f.appendChild(i);return i;}'];
 	this.amount = amount || 0;
 	this.currency = currency || 'EUR';
 	this.VS = vs || '';
@@ -547,9 +547,8 @@ function vubeplatbySign(value, key) {
 function createForm(name, obj, url, method) {
 	var output = 'fun' + 'ction ' + name + '() {var f=document.createElement("FORM");f.setAttribute("action","' + url + '");f.setAttribute("method","' + ( method || 'POST') + '");f.setAttribute("name","' + name + '");';
 
-	Object.keys(obj).forEach(function(key) {
-		output += '_libraryPlatba(f,"' + key + '","' + obj[key] + '");';
-	});
+	for (var key in obj)
+		output += 'onlineplatbyinput(f,"' + key + '","' + obj[key] + '");';
 
 	output += 'document.body.appendChild(f);f.submit();';
 	return output + '};';

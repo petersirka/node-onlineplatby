@@ -85,7 +85,6 @@ payment.toString();
 ## Spracovanie platby
 
 ```js
-
 var OP = require('onlineplatby');
 
 // params musí byť objekt s URL parametrami
