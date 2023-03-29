@@ -3,7 +3,7 @@ Node.js: Slovenské online platby
 
 > Nemal som možnosť všetko otestovať. V prípade problému ma kontaktujte.
 
-* Tatra banka - tatrapay (hmac + des)
+* Tatra banka - tatrapay (hmac + des) - <https://www.tatrabanka.sk/sk/blog/navody/ako-potvrdite-platbu-cez-tatrapay/>
 * Tatra banka - cardpay (hmac + des)
 * Slovenská sporiteľňa - sporopay
 * VÚB banka - vubeplatby
